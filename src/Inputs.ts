@@ -1,6 +1,7 @@
 import * as core from "@actions/core"
 import { Context } from "@actions/github/lib/context"
 import { readFileSync } from "fs"
+import { prerelease as semverPrerelease } from "semver";
 import { ArtifactGlobber } from "./ArtifactGlobber"
 import { Artifact } from "./Artifact"
 
@@ -85,6 +86,7 @@ export class CoreInputs implements Inputs {
 
     get createdPrerelease(): boolean {
         const preRelease = core.getInput("prerelease")
+        if (preRelease == "auto") return !!semverPrerelease(this.tag)
         return preRelease == "true"
     }
 
