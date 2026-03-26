@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs"
 import * as core from "@actions/core"
 import type * as github from "@actions/github"
+import { prerelease as semverPrerelease } from "semver"
 import type { Artifact } from "./Artifact.js"
 import type { ArtifactGlobber } from "./ArtifactGlobber.js"
 
@@ -88,6 +89,7 @@ export class CoreInputs implements Inputs {
 
     get createdPrerelease(): boolean {
         const preRelease = core.getInput("prerelease")
+        if (preRelease === "auto") return !!semverPrerelease(this.tag)
         return preRelease === "true"
     }
 
